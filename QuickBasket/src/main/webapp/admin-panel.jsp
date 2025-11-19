@@ -1,9 +1,6 @@
-<%@ page import="java.sql.*" %>
-<%@ page session="true" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Admin Panel - QuickBasket</title>
     <link rel="stylesheet" href="css/style.css">
        <style>
@@ -24,48 +21,27 @@
 </head>
 <body>
 <%@ include file="includes/header.jsp" %>
+<h2 style="text-align:center;">Admin Panel</h2>
 
-<%
-    if (!"admin".equals(session.getAttribute("role"))) {
-        response.sendRedirect("admin-login.jsp");
-        return;
-    }
-%>
+<div style="width:400px;margin:30px auto;background:#fff;padding:20px;border:1px solid #ccc;">
 
-<div style="width:760px;margin:30px auto;background:#fff;padding:14px;border:1px solid #ccc;">
-    <h3>Admin Panel</h3>
+    <a href="admin-orders.jsp" class="btn" style="display:block;margin-bottom:10px;">
+        View All Orders
+    </a>
 
-    <h4>Add Food Item</h4>
-    <form action="AddFoodServlet" method="post" style="margin-bottom:12px;">
-        <input type="text" name="name" placeholder="Food name" required style="width:50%;">
-        <input type="text" name="price" placeholder="Price" required style="width:30%;">
-        <input type="submit" value="Add" class="btn">
-    </form>
+    <a href="add-food.jsp" class="btn" style="display:block;margin-bottom:10px;">
+        Add Food Item
+    </a>
 
-    <h4>Food Items</h4>
-    <table border="1" cellpadding="6" cellspacing="0" style="width:100%;border-collapse:collapse;">
-        <tr><th>ID</th><th>Name</th><th>Price</th></tr>
-        <%
-            Connection con = null; PreparedStatement ps = null; ResultSet rs = null;
-            try {
-                con = com.food.DBConnection.getConnection();
-                ps = con.prepareStatement("SELECT id,name,price FROM food_items");
-                rs = ps.executeQuery();
-                while (rs.next()) {
-        %>
-        <tr>
-            <td><%= rs.getInt("id") %></td>
-            <td><%= rs.getString("name") %></td>
-            <td>rs<%= rs.getDouble("price") %></td>
-        </tr>
-        <%
-                }
-            } catch(Exception e) { e.printStackTrace(); }
-            finally { try{ if(rs!=null) rs.close(); if(ps!=null) ps.close(); if(con!=null) con.close(); } catch(Exception ex){} }
-        %>
-    </table>
+    <a href="menu.jsp" class="btn" style="display:block;margin-bottom:10px;">
+        View Menu
+    </a>
+
+    <a href="LogoutServlet" class="btn" style="display:block;background:#900;">
+        Logout
+    </a>
+
 </div>
 
-<%@ include file="includes/footer.jsp" %>
 </body>
 </html>

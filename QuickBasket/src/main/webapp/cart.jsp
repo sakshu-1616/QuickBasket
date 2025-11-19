@@ -5,21 +5,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart - QuickBasket</title>
-    <link rel="stylesheet" href="css/style.css">
-       <style>
+<style>
         body {
             background: url("images/back.png") no-repeat center center fixed;
             background-size: cover;
+            font-family: Arial, sans-serif;
         }
+
         .box {
             width: 360px;
             margin: 120px auto;
             background: #fff;
             padding: 22px;
             border: 1px solid #ccc;
+            text-align:center;
         }
-        .btn { display:inline-block; padding:8px 14px; background:#000; color:#fff; text-decoration:none; margin:6px; }
+
+        .btn { 
+            display:inline-block; 
+            padding:8px 14px; 
+            background:#000; 
+            color:#fff; 
+            text-decoration:none; 
+            margin:6px; 
+        }
+
         .btn.gray { background:#444; }
+
+        h2 { margin-bottom:10px; }
     </style>
 </head>
 <body>

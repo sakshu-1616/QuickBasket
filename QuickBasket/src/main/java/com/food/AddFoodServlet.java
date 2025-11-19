@@ -7,24 +7,25 @@ import javax.servlet.http.*;
 
 @WebServlet("/AddFoodServlet")
 public class AddFoodServlet extends HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, javax.servlet.http.HttpServletResponse res)
             throws IOException {
-        HttpSession s = request.getSession(false);
-        if (s == null || !"admin".equals(s.getAttribute("role"))) {
-            response.sendRedirect("admin-login.jsp");
-            return;
-        }
-        String name = request.getParameter("name").trim();
-        String priceStr = request.getParameter("price").trim();
+
+        String name = req.getParameter("name");
+        double price = Double.parseDouble(req.getParameter("price"));
+
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO food_items(name,price) VALUES(?,?)")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO food_items(name, price) VALUES(?,?)")) {
+
             ps.setString(1, name);
-            ps.setDouble(2, Double.parseDouble(priceStr));
+            ps.setDouble(2, price);
             ps.executeUpdate();
-            response.sendRedirect("admin-panel.jsp");
+
+            res.sendRedirect("add-food.jsp?success=1");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("admin-panel.jsp");
+            res.sendRedirect("add-food.jsp?error=1");
         }
     }
 }
