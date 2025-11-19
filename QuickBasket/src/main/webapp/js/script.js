@@ -13,43 +13,56 @@ function addedToCart() {
     alert("Item added to cart!");
 }
 
-/*   CREATE DATABASE IF NOT EXISTS quickbasket;
+/* DROP DATABASE IF EXISTS quickbasket;
+CREATE DATABASE quickbasket;
 USE quickbasket;
 
--- users table with role (user/admin)
+-- USERS TABLE
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
-    password VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'user'
+    password VARCHAR(100)
 );
 
--- food items
+-- ADMINS TABLE (SEPARATE)
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100)
+);
+
+-- FOOD ITEMS
 CREATE TABLE food_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(150),
     price DOUBLE
 );
 
--- orders (one row per food item ordered)
+-- ORDERS
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100),
+    user_email VARCHAR(100),
     food_id INT,
     order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- sample user
-INSERT IGNORE INTO users(name,email,password,role) VALUES
-('Test User','user@quick.com','user123','user'),
-('Admin','admin@quick.com','admin123','admin');
+-- SAMPLE USERS
+INSERT INTO users(name,email,password) VALUES
+('Test User','user@quick.com','user123'),
+('Demo User','demo@quick.com','demo123');
 
--- sample foods
-INSERT IGNORE INTO food_items(name,price) VALUES
+-- SAMPLE ADMINS
+INSERT INTO admins(name,email,password) VALUES
+('Admin','admin@quick.com','admin123');
+
+-- SAMPLE FOOD
+INSERT INTO food_items(name,price) VALUES
 ('Burger',120),
 ('Pizza',250),
 ('Pasta',150),
-('French Fries',60),
-('Sandwich',80);
+('Fries',60),
+('Sandwich',90);
+
      */
