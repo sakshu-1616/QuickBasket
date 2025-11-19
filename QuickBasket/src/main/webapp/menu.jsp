@@ -25,7 +25,7 @@
         %>
         <tr>
             <td><%= rs.getString("name") %></td>
-            <td>₹<%= rs.getDouble("price") %></td>
+            <td>RS. <%= rs.getDouble("price") %></td>
             <td>
                 <form action="CartServlet" method="post" style="margin:0;">
                     <input type="hidden" name="id" value="<%= id %>">

@@ -7,29 +7,35 @@ import javax.servlet.http.*;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, javax.servlet.http.HttpServletResponse res)
             throws IOException {
-        String email = request.getParameter("email").trim();
-        String pass = request.getParameter("password").trim();
+
+        String email = req.getParameter("email");
+        String pass = req.getParameter("password");
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT name,role FROM users WHERE email=? AND password=?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT name FROM users WHERE email=? AND password=?")) {
+
             ps.setString(1, email);
             ps.setString(2, pass);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("email", email);
-                    session.setAttribute("name", rs.getString("name"));
-                    session.setAttribute("role", rs.getString("role"));
-                    response.sendRedirect("menu.jsp");
-                } else {
-                    response.sendRedirect("login.jsp");
-                }
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                HttpSession s = req.getSession();
+                s.setAttribute("email", email);
+                s.setAttribute("name", rs.getString("name"));
+                s.setAttribute("role", "user");
+
+                res.sendRedirect("menu.jsp");
+            } else {
+                res.sendRedirect("login.jsp");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("login.jsp");
+            res.sendRedirect("login.jsp");
         }
     }
 }

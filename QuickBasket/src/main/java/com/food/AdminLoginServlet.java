@@ -7,29 +7,35 @@ import javax.servlet.http.*;
 
 @WebServlet("/AdminLoginServlet")
 public class AdminLoginServlet extends HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, javax.servlet.http.HttpServletResponse res)
             throws IOException {
-        String email = request.getParameter("email").trim();
-        String pass = request.getParameter("password").trim();
+
+        String email = req.getParameter("email");
+        String pass = req.getParameter("password");
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT name FROM users WHERE email=? AND password=? AND role='admin'")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT name FROM admins WHERE email=? AND password=?")) {
+
             ps.setString(1, email);
             ps.setString(2, pass);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("email", email);
-                    session.setAttribute("name", rs.getString("name"));
-                    session.setAttribute("role", "admin");
-                    response.sendRedirect("admin-panel.jsp");
-                } else {
-                    response.sendRedirect("admin-login.jsp");
-                }
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                HttpSession s = req.getSession();
+                s.setAttribute("email", email);
+                s.setAttribute("name", rs.getString("name"));
+                s.setAttribute("role", "admin");
+
+                res.sendRedirect("admin-panel.jsp");
+            } else {
+                res.sendRedirect("admin-login.jsp");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("admin-login.jsp");
+            res.sendRedirect("admin-login.jsp");
         }
     }
 }

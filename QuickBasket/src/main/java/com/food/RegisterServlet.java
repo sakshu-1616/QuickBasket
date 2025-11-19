@@ -7,23 +7,27 @@ import javax.servlet.http.*;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
-        String name = request.getParameter("name").trim();
-        String email = request.getParameter("email").trim();
-        String pass = request.getParameter("password").trim();
+
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String pass = req.getParameter("password");
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO users(name,email,password,role) VALUES(?,?,?,?)")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO users(name,email,password) VALUES(?,?,?)")) {
+
             ps.setString(1, name);
             ps.setString(2, email);
             ps.setString(3, pass);
-            ps.setString(4, "user");
+
             ps.executeUpdate();
-            response.sendRedirect("login.jsp");
-        } catch (SQLException e) {
+            res.sendRedirect("login.jsp");
+
+        } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("register.jsp");
+            res.sendRedirect("register.jsp");
         }
     }
 }

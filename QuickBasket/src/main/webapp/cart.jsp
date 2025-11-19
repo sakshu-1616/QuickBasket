@@ -22,85 +22,85 @@
         <p>Your cart is empty.</p>
     <%
         } else {
+
             double total = 0;
     %>
 
-        <table border="1" cellpadding="8" cellspacing="0" style="width:100%;border-collapse:collapse;">
-            <tr>
-                <th>Food</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%;border-collapse:collapse;">
+        <tr>
+            <th>Food</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
 
-            <%
-                Connection con=null; PreparedStatement ps=null; ResultSet rs=null;
+        <%
+            Connection con=null; PreparedStatement ps=null; ResultSet rs=null;
 
-                try {
-                    con = com.food.DBConnection.getConnection();
-                    ps = con.prepareStatement("SELECT name,price FROM food_items WHERE id=?");
+            try {
+                con = com.food.DBConnection.getConnection();
+                ps = con.prepareStatement("SELECT name,price FROM food_items WHERE id=?");
 
-                    // COUNT items by quantity
-                    Map<Integer, Integer> qtyMap = new HashMap<>();
+                Map<Integer, Integer> qtyMap = new HashMap<>();
 
-                    for (Integer id : cart)
-                        qtyMap.put(id, qtyMap.getOrDefault(id,0) + 1);
+                for (Integer id : cart)
+                    qtyMap.put(id, qtyMap.getOrDefault(id,0) + 1);
 
-                    for (Integer id : qtyMap.keySet()) {
-                        ps.setInt(1, id);
-                        rs = ps.executeQuery();
-                        if (rs.next()) {
-                            double price = rs.getDouble("price");
-                            int qty = qtyMap.get(id);
-                            total += price * qty;
-            %>
+                for (Integer id : qtyMap.keySet()) {
 
-            <tr>
-                <td><%= rs.getString("name") %></td>
-                <td>RS. <%= price %></td>
+                    ps.setInt(1, id);
+                    rs = ps.executeQuery();
 
-                <td>
-                    <%= qty %>
-                </td>
+                    if (rs.next()) {
+                        double price = rs.getDouble("price");
+                        int qty = qtyMap.get(id);
 
-                <!-- EDIT: update quantity -->
-                <td>
-                    <form action="UpdateCartServlet" method="post" style="margin:0;">
-                        <input type="hidden" name="id" value="<%= id %>">
-                        <input type="number" name="qty" min="1" value="<%= qty %>" style="width:50px;">
-                        <input type="submit" value="Update" class="btn">
-                    </form>
-                </td>
+                        total += price * qty;
+        %>
 
-                <!-- DELETE item -->
-                <td>
-                    <form action="RemoveCartServlet" method="post" style="margin:0;">
-                        <input type="hidden" name="id" value="<%= id %>">
-                        <input type="submit" value="Remove" class="btn" style="background:#900;">
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td><%= rs.getString("name") %></td>
+            <td>RS. <%= price %></td>
+            <td><%= qty %></td>
 
-            <%
-                        }
-                        rs.close();
+            <!-- UPDATE -->
+            <td>
+                <form action="<%=request.getContextPath()%>/UpdateCartServlet" method="post" style="margin:0;">
+                    <input type="hidden" name="id" value="<%= id %>">
+                    <input type="number" name="qty" value="<%= qty %>" min="1" style="width:50px;">
+                    <input type="submit" value="Update" class="btn">
+                </form>
+            </td>
+
+            <!-- DELETE -->
+            <td>
+                <form action="<%=request.getContextPath()%>/RemoveCartServlet" method="post" style="margin:0;">
+                    <input type="hidden" name="id" value="<%= id %>">
+                    <input type="submit" value="Remove" class="btn" style="background:#900;">
+                </form>
+            </td>
+        </tr>
+
+        <%
                     }
+                    rs.close();
+                }
 
-                } catch(Exception e){ e.printStackTrace(); }
-                finally { try{ if(ps!=null) ps.close(); if(con!=null) con.close(); }catch(Exception ex){} }
-            %>
+            } catch(Exception e){ e.printStackTrace(); }
+            finally { try{ if(ps!=null) ps.close(); if(con!=null) con.close(); }catch(Exception ex){} }
+        %>
 
-            <tr>
-                <td colspan="4" style="text-align:right;"><strong>Total:</strong></td>
-                <td>RS. <%= total %></td>
-            </tr>
+        <tr>
+            <td colspan="4" style="text-align:right;"><strong>Total:</strong></td>
+            <td>RS. <%= total %></td>
+        </tr>
 
-        </table>
+    </table>
 
-        <form action="OrderServlet" method="post" style="margin-top:10px;">
-            <input type="submit" value="Place Order" class="btn">
-        </form>
+    <form action="<%=request.getContextPath()%>/OrderServlet" method="post" style="margin-top:10px;">
+        <input type="submit" value="Place Order" class="btn">
+    </form>
 
     <%
         }
