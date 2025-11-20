@@ -34,7 +34,11 @@
 
         <input type="submit" value="Add Food" class="btn">
     </form>
-
+<a href="menu.jsp" class="btn" style="display:block;margin-bottom:10px;">
+        View Menu
+    </a><a href="admin-panel.jsp" class="btn" style="display:block;margin-bottom:10px;">
+       back to admin panel
+    </a>
 </div>
 <%
 if ("1".equals(request.getParameter("success"))) {

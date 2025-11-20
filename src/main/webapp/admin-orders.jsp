@@ -86,7 +86,9 @@ finally { try{
 %>
 
 </table>
-
+  </a><a href="admin-panel.jsp" class="btn" style="display:block;margin-bottom:10px;">
+        back to admin panel
+    </a>
 </div>
 
 </body>
